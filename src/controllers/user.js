@@ -1,7 +1,13 @@
-const usersAll = (req, res) => {
-    try {
-        res.json('desde all');
+const User = require('../models/user')
 
+const usersAll = async(req, res) => {
+    try {
+        const users = await User.find()
+        res.json({
+            msg: "Usuario creado con éxito!",
+            status: 200,
+            users
+        })
     } catch (error) {
         res.status(400).json(error)
     }
@@ -13,10 +19,16 @@ const userShow = (req, res) => {
         res.status(400).json(error)
     }
 }
-const userCreate = (req, res) => {
+const userCreate = async(req, res) => {
     try {
-        res.json('desde create');
-
+        const { name, email, password } = req.body;
+        const user = new User({ name, email, password });
+        await user.save();
+        console.log(user);
+        res.json({
+            msg: "Usuario creado con éxito!",
+            status: 200
+        })
     } catch (error) {
         res.status(400).json(error)
     }
