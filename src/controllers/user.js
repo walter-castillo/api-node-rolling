@@ -4,7 +4,7 @@ const usersAll = async(req, res) => {
     try {
         const users = await User.find()
         res.json({
-            msg: "Usuario creado con éxito!",
+            msg: "Mostrar todos los usuarios",
             status: 200,
             users
         })
@@ -12,9 +12,16 @@ const usersAll = async(req, res) => {
         res.status(400).json(error)
     }
 }
-const userShow = (req, res) => {
+const userShow = async(req, res) => {
+    const { id } = req.params;
     try {
-        res.json('desde show')
+        const user = await User.findById(id)
+            // if (!user) res.json({ msg: "No existe el id solicitado" })
+        res.json({
+            msg: "Mostrar usuario  específico",
+            status: 200,
+            user
+        })
     } catch (error) {
         res.status(400).json(error)
     }
@@ -33,16 +40,27 @@ const userCreate = async(req, res) => {
         res.status(400).json(error)
     }
 }
-const userUpdate = (req, res) => {
+const userUpdate = async(req, res) => {
+    const { id } = req.params;
+    const { name, email, password } = req.body;
     try {
-        res.json('desde update');
+        await User.findByIdAndUpdate(id, { name, email, password })
+        res.json({
+            msg: "usuario actualizado",
+            status: 200
+        })
     } catch (error) {
         res.status(400).json(error)
     }
 }
-const userDelete = (req, res) => {
+
+const userDelete = async(req, res) => {
     try {
-        res.json('desde delete');
+        await User.findByIdAndDelete(req.params.id)
+        res.json({
+            msg: "usuario eliminado",
+            status: 200
+        })
     } catch (error) {
         res.status(400).json(error)
     }
