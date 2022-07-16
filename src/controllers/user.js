@@ -47,9 +47,9 @@ const userShow = async(req, res) => {
 
 const userUpdate = async(req, res) => {
     const { id } = req.params;
-    const { name, email, password } = req.body;
+    const { name, password } = req.body;
     try {
-        await User.findByIdAndUpdate(id, { name, email, password })
+        await User.findByIdAndUpdate(id, { name, password }, { new: true })
         res.json({
             msg: "usuario actualizado"
         })
